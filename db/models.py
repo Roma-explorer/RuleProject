@@ -326,6 +326,7 @@ class Project(Base):
 
     id = Column(Integer, primary_key=True, server_default=text("nextval('project_id_seq'::regclass)"))
     name = Column(String(100), nullable=False, unique=True)
+    description = Column(String)
     date_start = Column(Date, nullable=False, server_default=text("now()"))
     date_end = Column(Date)
     contract_id = Column(ForeignKey('contract.number'))

@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>EmployeeWidget</class>
  <widget class="QWidget" name="EmployeeWidget">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -101,17 +104,7 @@
    <item row="11" column="0" colspan="2">
     <widget class="QLabel" name="lsigndate">
      <property name="text">
-      <string>Дата подписания </string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="2" colspan="3">
-    <widget class="QComboBox" name="department">
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-     <property name="editable">
-      <bool>true</bool>
+      <string>Дата начала работы</string>
      </property>
     </widget>
    </item>
@@ -283,6 +276,12 @@
      <property name="autoFillBackground">
       <bool>false</bool>
      </property>
+     <property name="inputMask">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
     </widget>
    </item>
    <item row="8" column="0">
@@ -293,9 +292,19 @@
     </widget>
    </item>
    <item row="13" column="4">
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="submitButton">
      <property name="text">
       <string>Ок</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1" colspan="4">
+    <widget class="QComboBox" name="department">
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="editable">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

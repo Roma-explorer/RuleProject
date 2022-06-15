@@ -141,9 +141,9 @@ class Ui_EmployeeWidget(object):
         self.lhours = QtWidgets.QLabel(EmployeeWidget)
         self.lhours.setObjectName("lhours")
         self.gridLayout.addWidget(self.lhours, 8, 0, 1, 1)
-        self.pushButton = QtWidgets.QPushButton(EmployeeWidget)
-        self.pushButton.setObjectName("pushButton")
-        self.gridLayout.addWidget(self.pushButton, 13, 4, 1, 1)
+        self.submitButton = QtWidgets.QPushButton(EmployeeWidget)
+        self.submitButton.setObjectName("submitButton")
+        self.gridLayout.addWidget(self.submitButton, 13, 4, 1, 1)
 
         self.retranslateUi(EmployeeWidget)
         QtCore.QMetaObject.connectSlotsByName(EmployeeWidget)
@@ -164,4 +164,4 @@ class Ui_EmployeeWidget(object):
         self.lname.setText(_translate("EmployeeWidget", "Имя"))
         self.lposition.setText(_translate("EmployeeWidget", "Позиция"))
         self.lhours.setText(_translate("EmployeeWidget", "Число часов"))
-        self.pushButton.setText(_translate("EmployeeWidget", "Ок"))
+        self.submitButton.setText(_translate("EmployeeWidget", "Ок"))
