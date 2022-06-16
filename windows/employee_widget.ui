@@ -33,17 +33,17 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="ldate_birth">
-     <property name="text">
-      <string>Дата рождения</string>
-     </property>
-    </widget>
-   </item>
    <item row="10" column="0">
     <widget class="QLabel" name="lworkperiod">
      <property name="text">
       <string>Период работы</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="ldate_birth">
+     <property name="text">
+      <string>Дата рождения</string>
      </property>
     </widget>
    </item>
@@ -67,8 +67,15 @@
      </property>
     </widget>
    </item>
+   <item row="2" column="1" colspan="4">
+    <widget class="QLineEdit" name="surname">
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
    <item row="9" column="2" colspan="3">
-    <widget class="QLineEdit" name="workhours">
+    <widget class="QLineEdit" name="worktype">
      <property name="autoFillBackground">
       <bool>false</bool>
      </property>
@@ -94,13 +101,6 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1" colspan="4">
-    <widget class="QLineEdit" name="surname">
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
    <item row="11" column="0" colspan="2">
     <widget class="QLabel" name="lsigndate">
      <property name="text">
@@ -108,10 +108,13 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="lphone">
-     <property name="text">
-      <string>Телефон</string>
+   <item row="7" column="1" colspan="4">
+    <widget class="QComboBox" name="department">
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="editable">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -125,6 +128,13 @@
      </property>
      <property name="wordWrap">
       <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="lphone">
+     <property name="text">
+      <string>Телефон</string>
      </property>
     </widget>
    </item>
@@ -199,6 +209,13 @@
     <widget class="QLabel" name="lemail">
      <property name="text">
       <string>Email</string>
+     </property>
+    </widget>
+   </item>
+   <item row="13" column="4">
+    <widget class="QPushButton" name="submitButton">
+     <property name="text">
+      <string>Ок</string>
      </property>
     </widget>
    </item>
@@ -288,23 +305,6 @@
     <widget class="QLabel" name="lhours">
      <property name="text">
       <string>Число часов</string>
-     </property>
-    </widget>
-   </item>
-   <item row="13" column="4">
-    <widget class="QPushButton" name="submitButton">
-     <property name="text">
-      <string>Ок</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="1" colspan="4">
-    <widget class="QComboBox" name="department">
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-     <property name="editable">
-      <bool>true</bool>
      </property>
     </widget>
    </item>

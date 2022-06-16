@@ -79,12 +79,13 @@
       </layout>
      </item>
      <item>
-      <widget class="QTreeWidget" name="tasks_list">
-       <column>
-        <property name="text">
-         <string notr="true">1</string>
-        </property>
-       </column>
+      <widget class="QListWidget" name="tasks_list"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="add_task">
+       <property name="text">
+        <string>Добавить задачу</string>
+       </property>
       </widget>
      </item>
     </layout>

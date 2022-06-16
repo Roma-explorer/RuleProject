@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>ProjectListWidget</class>
+ <widget class="QWidget" name="ProjectListWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -28,6 +28,9 @@
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
+   </item>
+   <item>
+    <widget class="QListWidget" name="projects_list"/>
    </item>
    <item>
     <widget class="QPushButton" name="add_button">

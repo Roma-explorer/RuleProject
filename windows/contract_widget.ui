@@ -24,7 +24,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="lineEdit"/>
+      <widget class="QLineEdit" name="contract_number"/>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_5">
@@ -34,7 +34,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="lineEdit_2"/>
+      <widget class="QLineEdit" name="cost_edit"/>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_2">
@@ -44,7 +44,7 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QDateEdit" name="dateEdit">
+      <widget class="QDateEdit" name="sign_date">
        <property name="calendarPopup">
         <bool>true</bool>
        </property>
@@ -65,7 +65,7 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QLineEdit" name="lineEdit_3"/>
+      <widget class="QLineEdit" name="duration_edit"/>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="label_7">
@@ -75,7 +75,7 @@
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="QComboBox" name="comboBox">
+      <widget class="QComboBox" name="client_box">
        <property name="editable">
         <bool>true</bool>
        </property>
@@ -84,12 +84,9 @@
      <item row="5" column="0">
       <widget class="QLabel" name="label_12">
        <property name="text">
-        <string>Номер тех. задания</string>
+        <string>Тех. задание</string>
        </property>
       </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QLineEdit" name="lineEdit_7"/>
      </item>
      <item row="6" column="0">
       <widget class="QLabel" name="label_13">
@@ -99,55 +96,26 @@
       </widget>
      </item>
      <item row="6" column="1">
-      <widget class="QTextEdit" name="textEdit"/>
+      <widget class="QTextEdit" name="risks_edit"/>
+     </item>
+     <item row="5" column="1">
+      <widget class="QPushButton" name="tech_task">
+       <property name="text">
+        <string>Добавить техническое задание</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QPushButton" name="add_contract">
+       <property name="text">
+        <string>Добавить</string>
+       </property>
+      </widget>
      </item>
     </layout>
-   </item>
-   <item>
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>ContractWidget</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>ContractWidget</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

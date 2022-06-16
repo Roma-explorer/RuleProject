@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>802</width>
+    <width>815</width>
     <height>627</height>
    </rect>
   </property>
@@ -19,6 +19,9 @@
      <property name="spacing">
       <number>15</number>
      </property>
+     <item row="4" column="1">
+      <widget class="QPlainTextEdit" name="description"/>
+     </item>
      <item row="0" column="0" colspan="2">
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
@@ -62,6 +65,128 @@
         </widget>
        </item>
       </layout>
+     </item>
+     <item row="2" column="0" colspan="2">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Исполнитель</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="member_box">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>Состояние</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="status_box">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Приоритет</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="priority_box">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="5" column="1">
+      <widget class="QPlainTextEdit" name="reason"/>
+     </item>
+     <item row="3" column="0" colspan="2">
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Запланированные часы</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="planned_hours">
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="maximum">
+          <number>100000</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="add_layout">
+         <item>
+          <widget class="QLabel" name="ladd_to">
+           <property name="text">
+            <string>Добавить к фиче</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="feature_box">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>200</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Описание</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+       </property>
+      </widget>
      </item>
      <item row="1" column="0" colspan="2">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -109,111 +234,6 @@
        </item>
       </layout>
      </item>
-     <item row="2" column="0" colspan="2">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Исполнитель</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="member_box">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Приоритет</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="priority_box">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="3" column="0" colspan="2">
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <item>
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>Запланированные часы</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="plan_hours">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="add_layout">
-         <item>
-          <widget class="QLabel" name="ladd_to">
-           <property name="text">
-            <string>Добавить к фиче</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="feature_box">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>200</width>
-             <height>0</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Описание</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QPlainTextEdit" name="description"/>
-     </item>
      <item row="5" column="0">
       <widget class="QLabel" name="lreason">
        <property name="text">
@@ -224,20 +244,14 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
-      <widget class="QPlainTextEdit" name="reason"/>
+     <item row="6" column="1">
+      <widget class="QPushButton" name="submitButton">
+       <property name="text">
+        <string>Добавить</string>
+       </property>
+      </widget>
      </item>
     </layout>
-   </item>
-   <item>
-    <widget class="QDialogButtonBox" name="ok_cancel">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>

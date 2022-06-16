@@ -101,6 +101,7 @@ class TechTask(Base):
     __tablename__ = 'techtask'
 
     id = Column(Integer, primary_key=True, server_default=text("nextval('techtask_id_seq'::regclass)"))
+    number = Column(String(15), nullable=False)
     description = Column(Text, nullable=False)
     purpose = Column(Text)
     control_procedures = Column(Text)
@@ -142,7 +143,7 @@ class Region(Base):
 
     country = relationship('Country', back_populates='regions')
 
-    cities = relationship('City', back_populates='regions')
+    cities = relationship('City', back_populates='region')
     addresses = relationship('Address', back_populates='region')
 
 
@@ -188,32 +189,33 @@ class Address(Base):
         CheckConstraint('house_number > 0'),
     )
 
+    id = Column(Integer, primary_key=True, server_default=text("nextval('address_id_seq'::regclass)"))
     country_id = Column(ForeignKey('country.id'), nullable=False)
     region_id = Column(ForeignKey('region.id'), nullable=False)
     city_id = Column(ForeignKey('city.id'), nullable=False)
     street_id = Column(ForeignKey('street.id'), nullable=False)
     house_number = Column(Integer)
-    id = Column(Integer, primary_key=True, server_default=text("nextval('address_id_seq'::regclass)"))
 
     city = relationship('City', back_populates='addresses')
     country = relationship('Country', back_populates='addresses')
     region = relationship('Region', back_populates='addresses')
     street = relationship('Street', back_populates='addresses')
 
-    departments = relationship('Address', back_populates='address')
-    clients = relationship('Address', back_populates='address')
+    departments = relationship('Department', back_populates='address')
+    clients = relationship('Client', back_populates='address')
 
 
 class Client(Base):
     __tablename__ = 'client'
 
     id = Column(Integer, primary_key=True, server_default=text("nextval('client_id_seq'::regclass)"))
+    name = Column(String(150), nullable=False)
     account = Column(String(20))
     inn = Column(String(12), nullable=False)
     ogrn = Column(String(13), nullable=False)
     phone = Column(String, nullable=False)
     email = Column(String, nullable=False)
-    address = Column(ForeignKey('address.id'), nullable=False)
+    address_id = Column(ForeignKey('address.id'), nullable=False)
 
     address = relationship('Address', back_populates='clients')
     
@@ -229,7 +231,7 @@ class Department(Base):
 
     address = relationship('Address', back_populates='departments')
     
-    projects = relationship('DepartmentProject', back_populates='department')
+    projects = relationship('DepartmentProject', back_populates='departments')
     employees = relationship('Employee', back_populates='department')
 
 
@@ -255,11 +257,16 @@ class Contract(Base):
     project = relationship('Project', back_populates='contract')
 
 
+class Sex(enum.Enum):
+    male = 'Мужской'
+    female = 'Женский'
+
+
 class Employee(Base):
     __tablename__ = 'employee'
 
     id = Column(Integer, primary_key=True, server_default=text("nextval('employee_id_seq'::regclass)"))
-    sex = Column(Enum('Мужской', 'Женский', name='sex'), nullable=False)
+    sex = Column(Enum(Sex, name='sex'), nullable=True)
     birth_date = Column(Date, nullable=False)
     position_id = Column(ForeignKey('position.id'), nullable=False)
     department_id = Column(ForeignKey('department.id'), nullable=False)
@@ -336,8 +343,8 @@ class Project(Base):
     head = relationship('Employee', back_populates='head_projects')
     
     features = relationship('Feature', back_populates='project')
-    employees = relationship('EmployeeProject', back_populates='project')
-    departments = relationship('DepartmentProject', back_populates='project')
+    employees = relationship('EmployeeProject', back_populates='projects')
+    departments = relationship('DepartmentProject', back_populates='projects')
 
 
 class DepartmentProject(Base):
@@ -350,8 +357,8 @@ class DepartmentProject(Base):
     project_id = Column(ForeignKey('project.id'), nullable=False)
     department_id = Column(ForeignKey('department.id'), nullable=False)
 
-    department = relationship('Department', back_populates='project')
-    project = relationship('Project', back_populates='department')
+    departments = relationship('Department', back_populates='projects')
+    projects = relationship('Project', back_populates='departments')
 
 
 class EmployeeProject(Base):
@@ -362,10 +369,24 @@ class EmployeeProject(Base):
     employee_id = Column(ForeignKey('employee.id'))
     time_periods = Column(ARRAY(INTERVAL()))
 
-    employee = relationship('Employee', back_populates='projects')
-    project = relationship('Project', back_populates='employees')
+    employees = relationship('Employee', back_populates='projects')
+    projects = relationship('Project', back_populates='employees')
     
     emprojfeatures = relationship('EmployeeProjectFeature', back_populates='employee_projects')
+
+
+class Status(enum.Enum):
+    opened = 'Открыта'
+    onwork = 'В работе'
+    closed = 'Закрыта'
+    renewed = 'Возобновлена'
+
+
+class Priority(enum.Enum):
+    minor = "Низкий"
+    medium = "Средний"
+    major = "Срочный"
+    critical = "Критический"
 
 
 class Feature(Base):
@@ -376,10 +397,13 @@ class Feature(Base):
     )
 
     id = Column(Integer, primary_key=True, server_default=text("nextval('feature_id_seq'::regclass)"))
+    name = Column(String(150), nullable=False)
     description_id = Column(ForeignKey('description.id'))
     planned_hours = Column(Integer)
     date_start = Column(Date)
     date_end = Column(Date)
+    status = Column(Enum(Status, name='status'), nullable=False, server_default=text("'открыта'::status"))
+    priority = Column(Enum(Priority, values_callable=lambda obj: [e.value for e in obj]))
     project_id = Column(ForeignKey('project.id'), nullable=False)
 
     description = relationship('Description', back_populates='features')
@@ -402,20 +426,6 @@ class EmployeeProjectFeature(Base):
 
     employee_projects = relationship('EmployeeProject', back_populates='emprojfeatures')
     feature = relationship('Feature', back_populates='emprojfeatures')
-    
-    
-class Status(enum.Enum):
-    opened = 'Открыта'
-    onwork = 'В работе'
-    closed = 'Закрыта'
-    renewed = 'Возобновлена'
-
-
-class Priority(enum.Enum):
-    minor = "Низкий"
-    medium = "Средний"
-    major = "Срочный"
-    critical = "Критический"
 
 
 class Task(Base):
@@ -426,6 +436,7 @@ class Task(Base):
     )
 
     id = Column(Integer, primary_key=True, server_default=text("nextval('task_id_seq'::regclass)"))
+    name = Column(String(150), nullable=False)
     description_id = Column(ForeignKey('description.id'))
     status = Column(Enum(Status, name='status'), nullable=False, server_default=text("'открыта'::status"))
     priority = Column(Enum(Priority, values_callable=lambda obj: [e.value for e in obj]))
@@ -450,6 +461,7 @@ class Mistake(Base):
     )
 
     id = Column(Integer, primary_key=True, server_default=text("nextval('mistake_id_seq'::regclass)"))
+    name = Column(String(150), nullable=False)
     reason_id = Column(ForeignKey('reason.id'))
     description_id = Column(ForeignKey('description.id'), nullable=False)
     status = Column(Enum(Status, name='status'), nullable=False, server_default=text("'открыта'::status"))

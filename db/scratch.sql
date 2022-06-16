@@ -247,3 +247,5 @@ ALTER TABLE employeeprojectfeature ADD CONSTRAINT uni UNIQUE (feature_id, employ
 ALTER TABLE departmentproject ADD CONSTRAINT onlyuni UNIQUE (project_id, department_id);
 
 ALTER TABLE client RENAME address TO address_id;
+
+ALTER TABLE Employee ALTER COLUMN phone TYPE VARCHAR(13)

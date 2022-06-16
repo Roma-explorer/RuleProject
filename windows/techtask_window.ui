@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>677</width>
-    <height>631</height>
+    <height>577</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,6 +16,9 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <layout class="QFormLayout" name="formLayout">
+     <property name="verticalSpacing">
+      <number>6</number>
+     </property>
      <item row="0" column="0">
       <widget class="QLabel" name="lname">
        <property name="text">
@@ -31,40 +34,13 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="lsigndate">
-       <property name="text">
-        <string>Дата закрытия</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QDateEdit" name="close_date">
-       <property name="autoFillBackground">
-        <bool>false</bool>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-       </property>
-       <property name="dateTime">
-        <datetime>
-         <hour>0</hour>
-         <minute>0</minute>
-         <second>0</second>
-         <year>2022</year>
-         <month>1</month>
-         <day>1</day>
-        </datetime>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>Цель</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="1" column="1">
       <widget class="QTextEdit" name="purpose_edit">
        <property name="maximumSize">
         <size>
@@ -73,6 +49,16 @@
         </size>
        </property>
       </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Описание</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QTextEdit" name="description_edit"/>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_2">
@@ -141,7 +127,7 @@
           <x>0</x>
           <y>0</y>
           <width>276</width>
-          <height>526</height>
+          <height>472</height>
          </rect>
         </property>
        </widget>
@@ -156,51 +142,15 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QDialogButtonBox" name="submit_button">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   <item row="1" column="1">
+    <widget class="QPushButton" name="submitButton">
+     <property name="text">
+      <string>Добавить</string>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>submit_button</sender>
-   <signal>accepted()</signal>
-   <receiver>TeckTaskDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>submit_button</sender>
-   <signal>rejected()</signal>
-   <receiver>TeckTaskDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
