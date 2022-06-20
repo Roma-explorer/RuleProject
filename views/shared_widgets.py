@@ -186,3 +186,4 @@ class AddDepartmentWidget(qtw.QWidget):
             session.add(department)
             session.commit()
             self.return_department.emit(department)
+            self.close()

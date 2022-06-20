@@ -34,7 +34,7 @@
        <item>
         <widget class="QLineEdit" name="name">
          <property name="inputMask">
-          <string>0</string>
+          <string/>
          </property>
         </widget>
        </item>

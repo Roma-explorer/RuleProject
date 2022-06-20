@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>MembersViewWidget</class>
+ <widget class="QWidget" name="MembersViewWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>787</width>
+    <width>1039</width>
     <height>300</height>
    </rect>
   </property>
@@ -30,6 +30,23 @@
        </item>
        <item>
         <widget class="QComboBox" name="position_box">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Департамент</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="department_box">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -67,7 +84,7 @@
       </layout>
      </item>
      <item>
-      <widget class="QListWidget" name="MembersViewWidget"/>
+      <widget class="QListWidget" name="members_list"/>
      </item>
     </layout>
    </item>

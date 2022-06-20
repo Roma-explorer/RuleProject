@@ -71,6 +71,12 @@
        </item>
        <item>
         <widget class="QPushButton" name="add_button">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text">
           <string>Добавить</string>
          </property>
@@ -79,13 +85,12 @@
       </layout>
      </item>
      <item>
-      <widget class="QListWidget" name="tasks_list"/>
-     </item>
-     <item>
-      <widget class="QPushButton" name="add_task">
-       <property name="text">
-        <string>Добавить задачу</string>
-       </property>
+      <widget class="QTreeWidget" name="tasks_list">
+       <column>
+        <property name="text">
+         <string notr="true">1</string>
+        </property>
+       </column>
       </widget>
      </item>
     </layout>

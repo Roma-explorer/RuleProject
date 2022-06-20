@@ -29,6 +29,7 @@ class Ui_CreateTaskWindow(object):
         self.label.setObjectName("label")
         self.horizontalLayout_3.addWidget(self.label)
         self.name = QtWidgets.QLineEdit(CreateTaskWindow)
+        self.name.setInputMask("")
         self.name.setObjectName("name")
         self.horizontalLayout_3.addWidget(self.name)
         self.label_3 = QtWidgets.QLabel(CreateTaskWindow)
@@ -146,7 +147,6 @@ class Ui_CreateTaskWindow(object):
         _translate = QtCore.QCoreApplication.translate
         CreateTaskWindow.setWindowTitle(_translate("CreateTaskWindow", "Form"))
         self.label.setText(_translate("CreateTaskWindow", "Название"))
-        self.name.setInputMask(_translate("CreateTaskWindow", "0"))
         self.label_3.setText(_translate("CreateTaskWindow", "Тип"))
         self.type_box.setItemText(0, _translate("CreateTaskWindow", "Функционал"))
         self.type_box.setItemText(1, _translate("CreateTaskWindow", "Задача"))

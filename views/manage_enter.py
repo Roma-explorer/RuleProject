@@ -67,6 +67,7 @@ class HolderWidget(qtw.QWidget):
 
         self.projects_list = WelcomeProjectListWidget(employee)
         self.projects_list.create_project.connect(self.gotomain)
+        self.projects_list.project_selected.connect(self.gotomain)
         self.stackwidget.addWidget(self.projects_list)
         self.stackwidget.setCurrentIndex(4)
 
@@ -186,6 +187,7 @@ class RegisterDialog(qtw.QDialog):
 class WelcomeProjectListWidget(qtw.QWidget):
 
     create_project = qtc.pyqtSignal()
+    project_selected = qtc.pyqtSignal()
 
     def __init__(self, employee, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -224,9 +226,11 @@ class WelcomeProjectListWidget(qtw.QWidget):
 
     def open_project(self, *project):
         project = project[0]
-        self.main_window = MainWindow(project)
-        self.main_window.show()
-        self.hide()
+        consts.project = project
+        self.project_selected.emit()
+        # self.main_window = MainWindow(project)
+        # self.main_window.show()
+        # self.hide()
 
 
 class ProjectItemWidget(qtw.QWidget):
