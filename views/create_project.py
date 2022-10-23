@@ -26,6 +26,7 @@ class CreateProjectWidget(qtw.QWidget):
         self.ui = Ui_CreateProjectWidget()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
+        self.setWindowTitle("Создание проекта")
 
         self.ui.contract_add.clicked.connect(self.open_contractwidget)
         self.ui.submitButton.clicked.connect(self.add_project)
@@ -79,6 +80,7 @@ class AddContractDialog(qtw.QWidget):
         self.ui = Ui_ContractWidget()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
+        self.setWindowTitle("Добавление контракта")
 
         self.clients = [client.name for client in session.query(Client).all()]
         self.ui.client_box.addItems(self.clients)
@@ -143,6 +145,7 @@ class ClientWidget(qtw.QWidget):
         self.ui = Ui_ClientWidget()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
+        self.setWindowTitle("Добавление клиента")
 
         self.ui.vlayout = qtw.QVBoxLayout()
         self.waddress = AddressWidget()
@@ -187,6 +190,7 @@ class TechTaskDialog(qtw.QDialog):
         self.ui = Ui_TeckTaskDialog()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
+        self.setWindowTitle("Добавление технического задания")
 
         self.scrollreq = qtw.QWidget()
         self.layout = qtw.QVBoxLayout()

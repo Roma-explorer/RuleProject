@@ -18,19 +18,6 @@ from views.shared_widgets import EmployeeWidget
 user = None
 
 
-class ClickableLabel(qtw.QLabel):
-    clicked = qtc.pyqtSignal()
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    def mousePressEvent(self, ev):
-        self.clicked.emit()
-
-    def mouseReleaseEvent(self, ev: QtGui.QMouseEvent) -> None:
-        self.clicked.emit()
-
-
 class HolderWidget(qtw.QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -103,6 +90,7 @@ class LoginDialog(qtw.QDialog):
         self.ui = Ui_LoginDialog()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
+        self.setWindowTitle("Вход")
         # self.ui.lunregistred = ClickableLabel(self.ui.lunregistred)
         self.ui.lunregistred.mousePressEvent = self.emit_register  # self.gotoregister
         # self.ui.lunregistred.mouseReleaseEvent = self.send_register  # self.gotoregister
@@ -141,6 +129,7 @@ class RegisterDialog(qtw.QDialog):
         self.ui = Ui_RegisterDialog()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
+        self.setWindowTitle("Регистрация")
         self.ui.lenter.mousePressEvent = self.emit_login  # self.gotologin
         self.ui.submitButton.clicked.connect(self.register)
         # self.ui.stacklayout = qtw.QStackedLayout(self)
@@ -195,6 +184,7 @@ class WelcomeProjectListWidget(qtw.QWidget):
         self.ui = Ui_ProjectListWidget()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
+        self.setWindowTitle("Выберите проект")
         self.employee = employee
 
         if self.employee:

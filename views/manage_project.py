@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from functools import partial
 
 from PyQt5 import QtGui
 from PyQt5 import QtCore as qtc
@@ -8,6 +9,8 @@ from db import session
 from db.models import Status, Priority, Task, Employee, Mistake, Feature, Description, Reason, Project, EmployeeProject, \
     EmployeeProjectFeature, Base, Position, Department
 from views import consts
+from views.shared_widgets import EmployeeWidget
+from views.side_widgets import SideTaskWidget, SideClientWidget
 from views.utils import *
 
 from windows.project_widget import Ui_SumProjectWidget
@@ -31,25 +34,41 @@ class MainWindow(qtw.QMainWindow):
         self.project = project
         self.employee = consts.employee
 
+        self.setWindowTitle(self.project.name)
+
         self.ui.project_name.setText(self.project.name)
         self.ui.emp_name.setText(self.employee.surname + ' ' + self.employee.name + ' ' + self.employee.lastname)
 
+        self.ui.stackedWidget.removeWidget(self.ui.stackedWidget.currentWidget())
+        self.show_sumup()
+
+        self.ui.welcome.clicked.connect(self.show_sumup)
+        self.ui.tasks.clicked.connect(self.show_tasksview)
+        self.ui.team.clicked.connect(self.show_membersview)
+
+    def show_sumup(self):
+        if self.ui.stackedWidget.currentWidget():
+            self.ui.stackedWidget.removeWidget(self.ui.stackedWidget.currentWidget())
+
         self.ui.sum_project = SumProjectWidget(self.project)
-        self.ui.stackedWidget.insertWidget(0, self.ui.sum_project)
-
-        self.ui.tasks_view = TasksViewWidget(self.project)
-        self.ui.stackedWidget.insertWidget(1, self.ui.tasks_view)
-
-        self.ui.members_view = MembersViewWidget(self.project)
-        self.ui.stackedWidget.insertWidget(2, self.ui.members_view)
-
-        # self.ui.tasks = TasksViewWidget()
-        # self.ui.stackedWidget.insertWidget(1, self.ui.sum_project)
+        self.ui.stackedWidget.addWidget(self.ui.sum_project)
         self.ui.stackedWidget.setCurrentIndex(0)
 
-        self.ui.welcome.clicked.connect(lambda x: self.ui.stackedWidget.setCurrentIndex(0))
-        self.ui.tasks.clicked.connect(lambda x: self.ui.stackedWidget.setCurrentIndex(1))
-        self.ui.team.clicked.connect(lambda x: self.ui.stackedWidget.setCurrentIndex(2))
+    def show_tasksview(self):
+        if self.ui.stackedWidget.currentWidget():
+            self.ui.stackedWidget.removeWidget(self.ui.stackedWidget.currentWidget())
+
+        self.ui.tasks_view = TasksViewWidget(self.project)
+        self.ui.stackedWidget.addWidget(self.ui.tasks_view)
+        self.ui.stackedWidget.setCurrentIndex(0)
+
+    def show_membersview(self):
+        if self.ui.stackedWidget.currentWidget():
+            self.ui.stackedWidget.removeWidget(self.ui.stackedWidget.currentWidget())
+
+        self.ui.members_view = MembersViewWidget(self.project)
+        self.ui.stackedWidget.addWidget(self.ui.members_view)
+        self.ui.stackedWidget.setCurrentIndex(0)
 
 
 class SumProjectWidget(qtw.QWidget):
@@ -65,7 +84,12 @@ class SumProjectWidget(qtw.QWidget):
         self.ui.description_editor.setPlainText(self.project.description)
         self.ui.startdate.setDate(self.project.date_start)
         self.ui.enddate.setDate(self.project.date_end)
-        self.ui.client.setText(self.project.contract.client.name)
+        self.ui.client.hide()
+        self.ui.client = ClickableLabel(text=self.project.contract.client.name)
+        self.ui.gridLayout_2.addWidget(self.ui.client, 1, 1, 1, 2)
+        self.ui.client.clicked.connect(self.show_client)
+
+        self.ui.stackedWidget.removeWidget(self.ui.stackedWidget.currentWidget())
 
         self.ui.mvlayout = qtw.QVBoxLayout()
         self.ui.tvlayout = qtw.QVBoxLayout()
@@ -76,20 +100,24 @@ class SumProjectWidget(qtw.QWidget):
         self.ui.mslayout.addWidget(qtw.QLabel(text='Автор проекта'))
         self.head = self.project.head
         self.whead = ShortMemberWidget(self.head)
-        # self.author.member_clicked.connect(self.show_member)
+        self.whead.member_clicked.connect(self.show_member)
         self.ui.mslayout.addWidget(self.whead)
         self.ui.mslayout.addWidget(qtw.QLabel(text='Команда'))
 
         for empproject in self.project.employees:
             self.wmember = ShortMemberWidget(empproject.employees)
-            # self.member.member_clicked.connect(self.show_member)
+            self.wmember.member_clicked.connect(self.show_member)
             self.ui.mslayout.addWidget(self.wmember)
 
         for feature in self.project.features:
             for task in feature.tasks:
-                self.ui.tslayout.addWidget(qtw.QLabel(text=task.name))
+                task_widget = ClickableLabel(text=task.name)
+                task_widget.clicked.connect(partial(self.show_task, task))
+                self.ui.tslayout.addWidget(task_widget)
             for bug in feature.mistakes:
-                self.ui.tslayout.addWidget(qtw.QLabel(text=bug.name))
+                bug_widget = ClickableLabel(text=bug.name)
+                bug_widget.clicked.connect(partial(self.show_task, bug))
+                self.ui.tslayout.addWidget(bug_widget)
 
         self.ui.members_group.setLayout(self.ui.mvlayout)
         self.ui.tasks_group.setLayout(self.ui.tvlayout)
@@ -107,7 +135,9 @@ class SumProjectWidget(qtw.QWidget):
 
     def add_task_to_tasks(self, *task):
         task = task[0]
-        self.ui.tslayout.addWidget(qtw.QLabel(text=task.name))
+        task_widget = ClickableLabel(text=task.name)
+        task_widget.clicked.connect(partial(self.show_task, task))
+        self.ui.tslayout.addWidget(task_widget)
 
     def add_member(self):
         self.memberadd_window = SelectEmployeeWindow(self.project)
@@ -116,20 +146,32 @@ class SumProjectWidget(qtw.QWidget):
 
     def add_member_to_members(self, employee):
         self.wmember = ShortMemberWidget(employee)
-        # self.member.member_clicked.connect(self.show_member)
+        self.wmember.member_clicked.connect(self.show_member)
         self.ui.mslayout.addWidget(self.wmember)
 
-    # def show_member(self):
-    #     self.vlayout = qtw.QVBoxLayout()
-    #     self.emp_widget = EmployeeWidget(side=True)
-    #     self.vlayout.addWidget(self.emp_widget)
-    #     # self.ui.side_info.setMinimumHeight(self.emp_widget.height())
-    #     self.ui.side_info.setLayout(self.vlayout)
+    def show_member(self, *employee):
+        if self.ui.stackedWidget.currentWidget():
+            self.ui.stackedWidget.removeWidget(self.ui.stackedWidget.currentWidget())
+        self.emp_widget = EmployeeWidget(employee[0])
+        self.ui.stackedWidget.addWidget(self.emp_widget)
+
+    def show_task(self, *task):
+        if self.ui.stackedWidget.currentWidget():
+            self.ui.stackedWidget.removeWidget(self.ui.stackedWidget.currentWidget())
+        self.side_task = SideTaskWidget(task[0])
+        self.ui.stackedWidget.addWidget(self.side_task)
+
+    def show_client(self):
+        if self.ui.stackedWidget.currentWidget():
+            self.ui.stackedWidget.removeWidget(self.ui.stackedWidget.currentWidget())
+        self.side_client = SideClientWidget(self.project.contract)
+        self.ui.stackedWidget.addWidget(self.side_client)
+
 
 
 class ShortMemberWidget(qtw.QWidget):
 
-    # member_clicked = qtc.pyqtSignal()
+    member_clicked = qtc.pyqtSignal(Employee)
 
     def __init__(self, member, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -138,14 +180,17 @@ class ShortMemberWidget(qtw.QWidget):
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
 
+        self.member = member
+
         self.ui.name.setText(" ".join([member.lastname, member.surname]))
         self.ui.mail.setText(member.email)
 
-        # self.ui.name.mousePressEvent = self.name_clicked
+        self.ui.name.mousePressEvent = self.name_clicked
+        self.mouseDoubleClickEvent = self.name_clicked
 
     def name_clicked(self, event):
         print("Member clicked")
-        self.member_clicked.emit()
+        self.member_clicked.emit(self.member)
 
 
 class TasksViewWidget(qtw.QWidget):
@@ -173,6 +218,8 @@ class TasksViewWidget(qtw.QWidget):
         self.ui.tasks_list.setHeaderHidden(True)
         self.filter_features()
 
+        self.ui.stackedWidget.removeWidget(self.ui.stackedWidget.currentWidget())
+
         self.ui.status_box.currentTextChanged.connect(self.filter_features)
         self.ui.priority_box.currentTextChanged.connect(self.filter_features)
         self.ui.member_box.currentTextChanged.connect(self.filter_features)
@@ -187,6 +234,8 @@ class TasksViewWidget(qtw.QWidget):
             tasks = self.filter_tasks(feature)
             if tasks:
                 feature_view = TaskWidget(feature)
+                feature_view.task_changed.connect(self.filter_features)
+                feature_view.task_clicked.connect(self.show_task)
                 self.features_views.append(feature_view)
                 feature_root = qtw.QTreeWidgetItem(self.ui.tasks_list)
                 self.ui.tasks_list.setItemWidget(feature_root, 0, feature_view)
@@ -231,6 +280,8 @@ class TasksViewWidget(qtw.QWidget):
             wlist = wlist[0]
 
         task_widget = TaskWidget(task)
+        task_widget.task_changed.connect(self.filter_features)
+        task_widget.task_clicked.connect(self.show_task)
         task_item = qtw.QTreeWidgetItem(feature_root)
         self.ui.tasks_list.setItemWidget(task_item, 0, task_widget)
         feature_root.addChild(task_item)
@@ -244,18 +295,30 @@ class TasksViewWidget(qtw.QWidget):
         if type(task[0]) == Feature:
             feature = task[0]
             feature_view = TaskWidget(feature)
+            feature_view.task_changed.connect(self.filter_features)
+            feature_view.task_clicked.connect(self.show_task)
             feature_root = qtw.QTreeWidgetItem(self.ui.tasks_list)
             self.ui.tasks_list.setItemWidget(feature_root, 0, feature_view)
             self.ui.tasks_list.addTopLevelItem(feature_root)
-            self.feature_views.append(feature_view)
+            self.features_views.append(feature_view)
         else:
             task = task[0]
             for index, feature_view in enumerate(self.features_views):
                 if feature_view.task == task.feature:
                     self.add_task(task, self.ui.tasks_list.topLevelItem(index), self.ui.tasks_list)
 
+    def show_task(self, *task):
+        if self.ui.stackedWidget.currentWidget():
+            self.ui.stackedWidget.removeWidget(self.ui.stackedWidget.currentWidget())
+        self.side_task = SideTaskWidget(task[0])
+        self.ui.stackedWidget.addWidget(self.side_task)
+
 
 class TaskWidget(qtw.QWidget):
+
+    task_changed = qtc.pyqtSignal(Base)
+    task_clicked = qtc.pyqtSignal(Base)
+
     def __init__(self, task, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -266,19 +329,61 @@ class TaskWidget(qtw.QWidget):
         self.task = task
 
         self.ui.status_box.addItems([s.value for s in Status])
-        self.ui.priority_box.addItems([s.value for s in Priority])
+        self.ui.priority_box.addItems([p.value for p in Priority])
 
-        self.ui.status_box.setCurrentText(task.status.value)
-        self.ui.priority_box.setCurrentText(task.priority.value)
-        self.ui.task_name.setText(task.name)
         if type(task) != Feature:
             emp = task.employee
         else:
             emp = task.emprojfeatures[0].employee_projects.employees
         self.ui.executor.setText(" ".join([emp.lastname, emp.name]))
-        self.ui.time.setText(str(task.planned_hours) + 'ч')
 
-        # self.ui.status_box.currentTextChanged.connect(self.)
+        self.ui.status_box.setCurrentText(task.status.value)
+        self.ui.priority_box.setCurrentText(task.priority.value)
+        self.ui.task_name.setText(task.name)
+        self.ui.time.setText(str(task.planned_hours) + 'ч')
+        self.ui.dedicatedhours_box.setValue(self.task.dedicated_hours)
+
+        self.ui.status_box.currentTextChanged.connect(self.status_save)
+        self.ui.priority_box.currentTextChanged.connect(self.priority_save)
+        self.ui.dedicatedhours_box.valueChanged.connect(self.dedicated_hours_save)
+
+        self.mouseDoubleClickEvent = self.task_pressed
+
+    def status_save(self):
+        valid = self.check_status()
+        if valid:
+            self.task.status = Status(self.ui.status_box.currentText())
+            session.add(self.task)
+            session.commit()
+            self.task_changed.emit(self.task)
+        else:
+            self.ui.status_box.setCurrentText(self.task.status.value)
+
+    def check_status(self):
+        if type(self.task) == Feature and self.ui.status_box.currentText() == Status.closed.value:
+            bugs = session.query(Mistake.status).filter_by(feature_id=self.task.id).all()
+            tasks = session.query(Task.status).filter_by(feature_id=self.task.id).all()
+            if any([task.status.value != Status.closed.value for task in bugs + tasks]):
+                message = qtw.QMessageBox(icon=qtw.QMessageBox.Warning,
+                                          text='Прежде чем завершить функционал завершите все задачи')
+                message.exec_()
+                return False
+        return True
+
+    def priority_save(self):
+        self.task.priority = Priority(self.ui.priority_box.currentText())
+        session.add(self.task)
+        session.commit()
+        self.task_changed.emit(self.task)
+
+    def dedicated_hours_save(self):
+        self.task.dedicated_hours = self.ui.dedicatedhours_box.value()
+        session.add(self.task)
+        session.commit()
+        self.task_changed.emit(self.task)
+
+    def task_pressed(self, env):
+        self.task_clicked.emit(self.task)
 
 
 class CreateTask(qtw.QWidget):
@@ -352,7 +457,7 @@ class CreateTask(qtw.QWidget):
             if self.type == 'Задача':
                 self.feature = self.ui.feature_box.currentText()
                 self.feature = session.query(Feature).filter_by(name=self.feature).first()
-                self.task = Task(name=self.name, date_start=self.date_start, date_end=self.date_end,
+                self.task = Task(name=self.name, date_start=self.date_start, date_end=self.date_end, dedicated_hours=0,
                                  description_id=self.description.id, status=Status(self.status),
                                  planned_hours=self.planned_hours, employee_id=self.member.id,
                                  priority=Priority(self.priority), feature_id=self.feature.id)
@@ -364,7 +469,9 @@ class CreateTask(qtw.QWidget):
                 self.feature = session.query(Feature).filter_by(name=self.feature).first()
                 self.reason = self.ui.reason.toPlainText()
                 self.reason = Reason(text=self.reason)
-                self.bug = Mistake(name=self.name, date_start=self.date_start, date_end=self.date_end,
+                session.add(self.reason)
+                session.commit()
+                self.bug = Mistake(name=self.name, date_start=self.date_start, date_end=self.date_end, dedicated_hours=0,
                                    description_id=self.description.id, status=Status(self.status),
                                    planned_hours=self.planned_hours, employee_id=self.member.id,
                                    priority=Priority(self.priority), feature_id=self.feature.id,
@@ -378,7 +485,7 @@ class CreateTask(qtw.QWidget):
                 self.feature = Feature(name=self.name, date_start=self.date_start, date_end=self.date_end,
                                        description_id=self.description.id, status=Status(self.status),
                                        planned_hours=self.planned_hours, priority=Priority(self.priority),
-                                       project_id=self.project.id)
+                                       project_id=self.project.id, dedicated_hours=0)
                 session.add(self.feature)
                 session.commit()
                 empprojfeature = EmployeeProjectFeature(feature_id=self.feature.id, employeeproj_id=empproj.id)
@@ -397,6 +504,8 @@ class MembersViewWidget(qtw.QWidget):
         self.ui.retranslateUi(self)
 
         self.project = project
+
+        self.ui.stackedWidget.removeWidget(self.ui.stackedWidget.currentWidget())
 
         self.positions = [pos[0] for pos in session.query(Position.name).distinct()]
         self.ui.position_box.addItems(['Все'] + self.positions)
@@ -437,6 +546,7 @@ class MembersViewWidget(qtw.QWidget):
 
     def add_member(self, member):
         sew = ShortEmployeeWidget(member, info=True)
+        sew.widget_clicked.connect(self.show_member)
         item = qtw.QListWidgetItem()
         widgetLayout = qtw.QHBoxLayout()
         widgetLayout.addStretch()
@@ -449,6 +559,12 @@ class MembersViewWidget(qtw.QWidget):
         self.ui.members_list.addItem(item)
         self.ui.members_list.setItemWidget(item, sew)
 
+    def show_member(self, *employee):
+        if self.ui.stackedWidget.currentWidget():
+            self.ui.stackedWidget.removeWidget(self.ui.stackedWidget.currentWidget())
+        self.emp_widget = EmployeeWidget(employee[0])
+        self.ui.stackedWidget.addWidget(self.emp_widget)
+
 
 class SelectEmployeeWindow(qtw.QDialog):
 
@@ -457,6 +573,7 @@ class SelectEmployeeWindow(qtw.QDialog):
     def __init__(self, project: Project, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.setWindowTitle("Добавление сотрудника")
         self.project = project
 
         self.vlayout = qtw.QVBoxLayout()
@@ -498,6 +615,7 @@ class SelectEmployeeWindow(qtw.QDialog):
 class ShortEmployeeWidget(qtw.QWidget):
 
     empadd_clicked = qtc.pyqtSignal(Employee)
+    widget_clicked = qtc.pyqtSignal(Employee)
 
     def __init__(self, employee, info=False, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -508,6 +626,9 @@ class ShortEmployeeWidget(qtw.QWidget):
 
         self.employee = employee
 
+        self.ui.name.mousePressEvent = self.emp_clicked
+        self.mouseDoubleClickEvent = self.emp_clicked
+
         self.ui.name.setText(' '.join([employee.surname, employee.name]))
         self.ui.position.setText(employee.position.name)
         self.ui.department.setText(employee.department.name)
@@ -517,10 +638,26 @@ class ShortEmployeeWidget(qtw.QWidget):
         if info:
             self.ui.add_button.hide()
 
+    def emp_clicked(self, event):
+        print("Member clicked")
+        self.widget_clicked.emit(self.employee)
+
     def employee_select(self):
         self.empadd_clicked.emit(self.employee)
         self.close()
 
+
+class ClickableLabel(qtw.QLabel):
+    clicked = qtc.pyqtSignal()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def mousePressEvent(self, ev):
+        self.clicked.emit()
+
+    def mouseReleaseEvent(self, ev: QtGui.QMouseEvent) -> None:
+        self.clicked.emit()
 
 
 if __name__ == '__main__':

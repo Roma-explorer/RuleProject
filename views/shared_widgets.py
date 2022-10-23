@@ -66,12 +66,13 @@ class AddressWidget(qtw.QWidget):
 class EmployeeWidget(qtw.QWidget):
     employee_added = qtc.pyqtSignal(Employee)
 
-    def __init__(self, side=False, *args, **kwargs):
+    def __init__(self, employee: Employee = None, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.ui = Ui_EmployeeWidget()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
+        self.setWindowTitle("Создание сотрудника")
 
         # self.ui.sex_box.addItems([Sex.male.value, Sex.female.value])
 
@@ -81,9 +82,11 @@ class EmployeeWidget(qtw.QWidget):
         self.departments = [dep[0] for dep in session.query(Department.name).distinct()]
         self.ui.department.addItems(self.departments)
 
-        if side:
+        if employee:
+            self.employee = employee
             self.ui.submitButton.hide()
             self.setWindowModality(qtc.Qt.ApplicationModal)
+            self.populate_widget()
 
         self.ui.submitButton.clicked.connect(self.create_employee)
 
@@ -106,7 +109,7 @@ class EmployeeWidget(qtw.QWidget):
         self.position = self.ui.position.currentText()
         self.department = self.ui.department.currentText()
         self.worktype = self.ui.worktype.text()
-        self.amount_hours = self.ui.amount_hours.text()
+        self.amount_hours = self.ui.amount_hours.value()
         self.start_period = self.ui.start_period.time().toPyTime()
         self.end_period = self.ui.end_period.time().toPyTime()
         self.sign_date = self.ui.sign_date.date().toPyDate()
@@ -148,6 +151,23 @@ class EmployeeWidget(qtw.QWidget):
     def add_department(self, *department):
         self.department = department[0]
         self.save_employee()
+
+    def populate_widget(self):
+        self.empcontract = self.employee.contracts[0]
+        self.ui.department.setCurrentText(self.employee.department.name)
+        self.ui.position.setCurrentText(self.employee.position.name)
+
+        self.ui.name.setText(self.employee.name)
+        self.ui.surname.setText(self.employee.surname)
+        self.ui.lastname.setText(self.employee.lastname)
+        self.ui.date.setDate(self.employee.birth_date)
+        self.ui.amount_hours.setValue(self.empcontract.num_hours)
+        self.ui.email.setText(self.employee.email)
+        self.ui.phone.setText(self.employee.phone)
+        self.ui.email.setText(self.employee.email)
+        self.ui.worktype.setText(self.empcontract.work_type)
+        self.ui.sign_date.setDate(self.empcontract.sign_date)
+        self.ui.probation_date.setDate(self.empcontract.probation_time)
 
 
 class AddDepartmentWidget(qtw.QWidget):

@@ -254,13 +254,6 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="2" colspan="3">
-    <widget class="QLineEdit" name="amount_hours">
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
    <item row="6" column="0">
     <widget class="QLabel" name="lposition">
      <property name="text">
@@ -305,6 +298,16 @@
     <widget class="QLabel" name="lhours">
      <property name="text">
       <string>Число часов</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="2" colspan="3">
+    <widget class="QSpinBox" name="amount_hours">
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
+     <property name="value">
+      <number>40</number>
      </property>
     </widget>
    </item>
